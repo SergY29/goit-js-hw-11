@@ -8,7 +8,10 @@ const refs = {
   divGallery: document.querySelector('.gallery'),
 };
 
-
+let gallery = new SimpleLightbox('.photo-card a', {
+  captionsData: "alt",
+  captionDelay: 250
+});
 
 
 
@@ -45,15 +48,14 @@ fetchPictures('red').then(response => {
     </div>`})
       .join("");
     refs.divGallery.innerHTML = markup;
-    // console.log(markup)
   }
-  let gallery = new SimpleLightbox('.gallery a', {
-    captionsData: "alt",
-    captionDelay: 250
-  });
+
 
 });
 
+
+gallery.on('show.simplelightbox', function () {
+});
 
 
 
