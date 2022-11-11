@@ -8,10 +8,7 @@ const refs = {
   divGallery: document.querySelector('.gallery'),
 };
 
-let gallery = new SimpleLightbox('.photo-card a', {
-  captionsData: "alt",
-  captionDelay: 250
-});
+
 
 
 
@@ -25,23 +22,23 @@ fetchPictures('red').then(response => {
   } else {
     // const value = response.data.hits;
     const markup = response.map((value) => {
-      const { largeImageURL, webformatURL, tags } = value
+      const { largeImageURL, webformatURL, tags, likes, views, comments, downloads } = value
       return `<div class="photo-card">
         <a href="${largeImageURL}">
-      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+      <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
       </a>
         <div class="info">
         <p class="info-item">
-          <b>Likes</b>
+          <b>Likes</b>${likes}
         </p>
         <p class="info-item">
-          <b>Views</b>
+          <b>Views</b>${views}
         </p>
         <p class="info-item">
-          <b>Comments</b>
+          <b>Comments</b>${comments}
         </p>
         <p class="info-item">
-          <b>Downloads</b>
+          <b>Downloads</b>${downloads}
         </p>
       </div>
       
@@ -49,13 +46,14 @@ fetchPictures('red').then(response => {
       .join("");
     refs.divGallery.innerHTML = markup;
   }
-
-
+  new SimpleLightbox('.photo-card a', {
+    captionsData: "alt",
+    captionDelay: 250
+  });
 });
 
 
-gallery.on('show.simplelightbox', function () {
-});
+
 
 
 
