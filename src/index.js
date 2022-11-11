@@ -14,19 +14,21 @@ refs.form.addEventListener('submit', onSearch)
 function onSearch(e) {
   e.preventDefault();
   value = e.currentTarget.elements.searchQuery.value;
-  // console.log(value)
 
   fetchPictures(value)
-    .then(response => {
-      if (response.length === 0) {
-        // console.log(response);
-        Notiflix.Notify.warning('Sorry, there are no images matching your search query. Please try again.');
-        return
-      } else {
-        // const value = response.data.hits;
-        const markup = response.map((value) => {
-          const { largeImageURL, webformatURL, tags, likes, views, comments, downloads } = value
-          return `<div class="photo-card">
+    .then(createMarkup);
+
+
+};
+
+function createMarkup(response) {
+  if (response.length === 0) {
+    Notiflix.Notify.warning('Sorry, there are no images matching your search query. Please try again.');
+    return
+  } else {
+    const markup = response.map((value) => {
+      const { largeImageURL, webformatURL, tags, likes, views, comments, downloads } = value
+      return `<div class="photo-card">
         <a href="${largeImageURL}">
       <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
       </a>
@@ -46,19 +48,13 @@ function onSearch(e) {
       </div>
       
     </div>`})
-          .join("");
-        refs.divGallery.innerHTML = markup;
-      }
-    });
-
-  new SimpleLightbox('.photo-card a', {
+      .join("");
+    refs.divGallery.innerHTML = markup;
+  }
+  let gallery = new SimpleLightbox('.photo-card a', {
     captionsData: "alt",
     captionDelay: 250
   });
-};
-
-function createMarkup() {
-
 }
 
 
