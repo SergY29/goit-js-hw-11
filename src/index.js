@@ -8,7 +8,7 @@ const refs = {
   divGallery: document.querySelector('.gallery'),
   buttonLoadMore: document.querySelector('.load-more'),
 };
-
+let maxQuery = 0;
 let gallery = new SimpleLightbox('.gallery a', {
   captionsData: "alt",
   captionDelay: 250
@@ -24,6 +24,7 @@ function onSearch(e) {
   e.preventDefault();
   refs.divGallery.innerHTML = '';
   resetPage();
+  resetMaxQeury();
   fetchPictures.searchQuery = e.currentTarget.elements.searchQuery.value;
   // console.log(fetchPictures.searchQuery)
   fetchPictures(fetchPictures.searchQuery)
@@ -31,15 +32,20 @@ function onSearch(e) {
       createMarkup(data);
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
     });
+
+
 };
 
 function onloadMore() {
   refs.buttonLoadMore.style.display = "none";
   fetchPictures(fetchPictures.searchQuery)
     .then(createMarkup);
+
 };
 
 function createMarkup(data) {
+
+
   if (data.hits.length === 0) {
     Notiflix.Notify.warning('Sorry, there are no images matching your search query. Please try again.');
     return
@@ -71,6 +77,7 @@ function createMarkup(data) {
     refs.divGallery.insertAdjacentHTML("beforeend", markup);
     refs.buttonLoadMore.style.display = "block";
     gallery.refresh();
+    maxQuery += 40;
 
     const { height: cardHeight } = refs.divGallery.firstElementChild.getBoundingClientRect();
 
@@ -87,7 +94,9 @@ function createMarkup(data) {
   }
 }
 
-
+function resetMaxQeury() {
+  maxQuery = 0;
+}
 
 // const { scrollHeight, clientHeight, scrollTop
 // } = document.documentElement
