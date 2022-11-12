@@ -13,7 +13,6 @@ const params = {
 
 
 async function fetchPictures(inputValue) {
-    searchQuery = '';
     maxQuery = params.page * params.per_page;
     // console.log(maxQuery);
 
