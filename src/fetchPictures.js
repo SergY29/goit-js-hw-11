@@ -6,17 +6,26 @@ const params = {
     image_type: "photo",
     orientation: "horizontal",
     safesearch: "true",
+    per_page: 40,
+    page: 1,
 };
 
+
+
 async function fetchPictures(inputValue) {
+    searchQuery = '';
     try {
         const response = await axios.get(`${URL}/api/?key=${KEY_API}&q=${inputValue}`, { params },);
-        return response.data.hits;
+        params.page += 1;
+        console.log(response.data);
+        return response.data;
     } catch (error) {
         console.error(error);
     }
-
-
 }
 
-export { fetchPictures };
+function resetPage() {
+    params.page = 1;
+}
+
+export { fetchPictures, resetPage };
