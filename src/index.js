@@ -9,6 +9,11 @@ const refs = {
   buttonLoadMore: document.querySelector('.load-more'),
 };
 
+let gallery = new SimpleLightbox('.gallery a', {
+  captionsData: "alt",
+  captionDelay: 250
+});
+
 refs.buttonLoadMore.style.display = "none";
 
 refs.form.addEventListener('submit', onSearch);
@@ -24,7 +29,7 @@ function onSearch(e) {
   fetchPictures(fetchPictures.searchQuery)
     .then(data => {
       createMarkup(data);
-      Notiflix.Notify.warning(`Hooray! We found ${data.totalHits} images.`);
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
     });
 };
 
@@ -65,12 +70,15 @@ function createMarkup(data) {
       .join("");
     refs.divGallery.insertAdjacentHTML("beforeend", markup);
     refs.buttonLoadMore.style.display = "block";
+    gallery.refresh();
 
+    const { height: cardHeight } = refs.divGallery.firstElementChild.getBoundingClientRect();
 
-    let gallery = new SimpleLightbox('.photo-card a', {
-      captionsData: "alt",
-      captionDelay: 250
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
     });
+
     if (maxQuery >= data.totalHits) {
       Notiflix.Notify.warning(`We're sorry, but you've reached the end of search results.`);
       refs.buttonLoadMore.style.display = "none";
